@@ -1,0 +1,30 @@
+{
+  "connection": "default",
+  "collectionName": "menus",
+  "info": {
+    "name": "menu",
+    "description": "Liste des menus disponibles chez Blue Note"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "nomDuMenu": {
+      "type": "string"
+    },
+    "descriptionDuMenu": {
+      "type": "text"
+    },
+    "image": {
+      "model": "file",
+      "via": "related",
+      "plugin": "upload"
+    },
+    "plats": {
+      "collection": "plat",
+      "via": "menu"
+    }
+  }
+}

@@ -1,0 +1,398 @@
+input createMenuInput {
+  data: MenuInput
+}
+
+type createMenuPayload {
+  menu: Menu
+}
+
+input createPlatInput {
+  data: PlatInput
+}
+
+type createPlatPayload {
+  plat: Plat
+}
+
+input createRoleInput {
+  data: RoleInput
+}
+
+type createRolePayload {
+  role: UsersPermissionsRole
+}
+
+input createUserInput {
+  data: UserInput
+}
+
+type createUserPayload {
+  user: UsersPermissionsUser
+}
+
+input createVinInput {
+  data: VinInput
+}
+
+type createVinPayload {
+  vin: Vin
+}
+
+"""
+The `DateTime` scalar represents a date and time following the ISO 8601 standard
+"""
+scalar DateTime
+
+input deleteMenuInput {
+  where: InputID
+}
+
+type deleteMenuPayload {
+  menu: Menu
+}
+
+input deletePlatInput {
+  where: InputID
+}
+
+type deletePlatPayload {
+  plat: Plat
+}
+
+input deleteRoleInput {
+  where: InputID
+}
+
+type deleteRolePayload {
+  role: UsersPermissionsRole
+}
+
+input deleteUserInput {
+  where: InputID
+}
+
+type deleteUserPayload {
+  user: UsersPermissionsUser
+}
+
+input deleteVinInput {
+  where: InputID
+}
+
+type deleteVinPayload {
+  vin: Vin
+}
+
+input editFileInput {
+  name: String
+  hash: String
+  sha256: String
+  ext: String
+  mime: String
+  size: String
+  url: String
+  provider: String
+  public_id: String
+  related: [ID]
+}
+
+input editMenuInput {
+  nomDuMenu: String
+  descriptionDuMenu: String
+  image: ID
+  plats: [ID]
+}
+
+input editPlatInput {
+  prix: Int
+  intitule: String
+  menu: ID
+  type: ENUM_PLAT_TYPE
+}
+
+input editRoleInput {
+  name: String
+  description: String
+  type: String
+  permissions: [ID]
+  users: [ID]
+}
+
+input editUserInput {
+  username: String
+  email: String
+  provider: String
+  password: String
+  resetPasswordToken: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: ID
+}
+
+input editVinInput {
+  nomDuVin: String
+  descriptionDuVin: String
+  prix: Int
+}
+
+enum ENUM_PLAT_TYPE {
+  entree
+  plat
+  dessert
+}
+
+input FileInput {
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related: [ID]
+}
+
+input InputID {
+  id: ID!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""The `Long` scalar type represents 52-bit integers"""
+scalar Long
+
+"""Liste des menus disponibles chez Blue Note"""
+type Menu {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  nomDuMenu: String
+  descriptionDuMenu: String
+  image: UploadFile
+  plats(sort: String, limit: Int, start: Int, where: JSON): [Plat]
+}
+
+input MenuInput {
+  nomDuMenu: String
+  descriptionDuMenu: String
+  image: ID
+  plats: [ID]
+}
+
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Menu | createMenuPayload | updateMenuPayload | deleteMenuPayload | Plat | createPlatPayload | updatePlatPayload | deletePlatPayload | Vin | createVinPayload | updateVinPayload | deleteVinPayload | UploadFile | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload
+
+type Mutation {
+  createMenu(input: createMenuInput): createMenuPayload
+  updateMenu(input: updateMenuInput): updateMenuPayload
+  deleteMenu(input: deleteMenuInput): deleteMenuPayload
+  createPlat(input: createPlatInput): createPlatPayload
+  updatePlat(input: updatePlatInput): updatePlatPayload
+  deletePlat(input: deletePlatInput): deletePlatPayload
+  createVin(input: createVinInput): createVinPayload
+  updateVin(input: updateVinInput): updateVinPayload
+  deleteVin(input: deleteVinInput): deleteVinPayload
+
+  """Create a new role"""
+  createRole(input: createRoleInput): createRolePayload
+
+  """Update an existing role"""
+  updateRole(input: updateRoleInput): updateRolePayload
+
+  """Delete an existing role"""
+  deleteRole(input: deleteRoleInput): deleteRolePayload
+
+  """Create a new user"""
+  createUser(input: createUserInput): createUserPayload
+
+  """Update an existing user"""
+  updateUser(input: updateUserInput): updateUserPayload
+
+  """Delete an existing user"""
+  deleteUser(input: deleteUserInput): deleteUserPayload
+  upload(refId: ID, ref: String, source: String, file: Upload!): UploadFile!
+}
+
+"""Plats servis chez Blue Note"""
+type Plat {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  prix: Int
+  intitule: String
+  menu: Menu
+  type: ENUM_PLAT_TYPE!
+}
+
+input PlatInput {
+  prix: Int
+  intitule: String
+  menu: ID
+  type: ENUM_PLAT_TYPE!
+}
+
+type Query {
+  menu(id: ID!): Menu
+  menus(sort: String, limit: Int, start: Int, where: JSON): [Menu]
+  plat(id: ID!): Plat
+  plats(sort: String, limit: Int, start: Int, where: JSON): [Plat]
+  vin(id: ID!): Vin
+  vins(sort: String, limit: Int, start: Int, where: JSON): [Vin]
+  files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  role(id: ID!): UsersPermissionsRole
+
+  """
+  Retrieve all the existing roles. You can't apply filters on this query.
+  """
+  roles(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsRole]
+  user(id: ID!): UsersPermissionsUser
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+  me: UsersPermissionsMe
+}
+
+input RoleInput {
+  name: String!
+  description: String
+  type: String
+  permissions: [ID]
+  users: [ID]
+}
+
+input updateMenuInput {
+  where: InputID
+  data: editMenuInput
+}
+
+type updateMenuPayload {
+  menu: Menu
+}
+
+input updatePlatInput {
+  where: InputID
+  data: editPlatInput
+}
+
+type updatePlatPayload {
+  plat: Plat
+}
+
+input updateRoleInput {
+  where: InputID
+  data: editRoleInput
+}
+
+type updateRolePayload {
+  role: UsersPermissionsRole
+}
+
+input updateUserInput {
+  where: InputID
+  data: editUserInput
+}
+
+type updateUserPayload {
+  user: UsersPermissionsUser
+}
+
+input updateVinInput {
+  where: InputID
+  data: editVinInput
+}
+
+type updateVinPayload {
+  vin: Vin
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UploadFile {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related(sort: String, limit: Int, start: Int, where: JSON): [Morph]
+}
+
+input UserInput {
+  username: String!
+  email: String!
+  provider: String
+  password: String
+  resetPasswordToken: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: ID
+}
+
+type UsersPermissionsMe {
+  _id: ID!
+  username: String!
+  email: String!
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsMeRole
+}
+
+type UsersPermissionsMeRole {
+  _id: ID!
+  name: String!
+  description: String
+  type: String
+}
+
+type UsersPermissionsPermission {
+  id: ID!
+  type: String!
+  controller: String!
+  action: String!
+  enabled: Boolean!
+  policy: String
+  role: UsersPermissionsRole
+}
+
+type UsersPermissionsRole {
+  id: ID!
+  name: String!
+  description: String
+  type: String
+  permissions(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsPermission]
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+}
+
+type UsersPermissionsUser {
+  id: ID!
+  username: String!
+  email: String!
+  provider: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsRole
+}
+
+type Vin {
+  id: ID!
+  created_at: DateTime!
+  updated_at: DateTime!
+  nomDuVin: String
+  descriptionDuVin: String
+  prix: Int
+}
+
+input VinInput {
+  nomDuVin: String
+  descriptionDuVin: String
+  prix: Int
+}

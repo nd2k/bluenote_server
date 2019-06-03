@@ -1,0 +1,36 @@
+{
+  "connection": "default",
+  "collectionName": "plats",
+  "info": {
+    "name": "plat",
+    "description": "Plats servis chez Blue Note"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "prix": {
+      "type": "integer"
+    },
+    "intitule": {
+      "type": "text"
+    },
+    "menu": {
+      "model": "menu",
+      "via": "plats"
+    },
+    "type": {
+      "unique": true,
+      "enum": [
+        "entree",
+        "plat",
+        "dessert"
+      ],
+      "default": "entree",
+      "required": true,
+      "type": "enumeration"
+    }
+  }
+}

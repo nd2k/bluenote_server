@@ -1,0 +1,24 @@
+{
+  "connection": "default",
+  "collectionName": "vins",
+  "info": {
+    "name": "vin",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "nomDuVin": {
+      "type": "string"
+    },
+    "descriptionDuVin": {
+      "type": "text"
+    },
+    "prix": {
+      "type": "integer"
+    }
+  }
+}
